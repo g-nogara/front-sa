@@ -1,0 +1,7 @@
+{
+  "AWS_REGION": "us_east_2",
+  "USER_POOL_ID": 1234,
+  "CLIENT_ID": 4321,
+  "IDENTITY_POOL_ID": 1111,
+  "API_URL": "localhost:3000"
+}
