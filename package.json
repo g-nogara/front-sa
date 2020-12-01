@@ -10,6 +10,8 @@
   "dependencies": {
     "@popperjs/core": "^2.5.4",
     "amazon-cognito-identity-js": "^4.5.5",
+    "aws-sdk": "^2.799.0",
+    "axios": "^0.21.0",
     "bootstrap": "^4.5.3",
     "core-js": "^3.6.5",
     "portal-vue": "^2.1.7",

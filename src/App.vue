@@ -1,14 +1,11 @@
 <script>
 export default {
   name: 'App',
-
-  components: {
-    
-  },
-
-  data: () => ({
-    //
-  }),
+  computed: {
+    hasAccess () {
+      return !!sessionStorage.getItem('awsAccess')
+    }
+  }
 };
 </script>
 
@@ -47,18 +44,32 @@ export default {
               nav
               dense
             >
-            <v-list-item to="login">
+            <v-list-item v-if="!hasAccess" to="login">
               <v-list-item-icon>
                 <v-icon>mdi-login</v-icon>
               </v-list-item-icon>
               <v-list-item-title>Login</v-list-item-title>
             </v-list-item>
 
-            <v-list-item to="register">
+            <v-list-item v-if="!hasAccess" to="register">
               <v-list-item-icon>
                 <v-icon>mdi-fountain-pen-tip</v-icon>
               </v-list-item-icon>
               <v-list-item-title>Register</v-list-item-title>
+            </v-list-item>
+
+            <v-list-item v-if="!hasAccess" to="validate">
+              <v-list-item-icon>
+                <v-icon>mdi-code-tags-check</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>Validate code</v-list-item-title>
+            </v-list-item>
+
+            <v-list-item v-if="hasAccess" to="home">
+              <v-list-item-icon>
+                <v-icon>mdi-home</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>Home</v-list-item-title>
             </v-list-item>
 
           </v-list>

@@ -59,14 +59,14 @@ import { CognitoUserAttribute, CognitoUserPool } from 'amazon-cognito-identity-j
 
 <template>
   <v-form v-model="valid">
-    <v-alert v-if="showErrorAlert"
+    <v-alert :value="showErrorAlert"
     type="error"
     transition="slide-x-transition"
     dismissible
     >
       {{ errorMessage }}
     </v-alert>
-    <v-alert v-if="showSuccessAlert"
+    <v-alert :value="showSuccessAlert"
     type="success"
     transition="slide-x-transition"
     dismissible
