@@ -7,6 +7,9 @@ import axios from 'axios'
       message: '',
       decks: [],
     }),
+    components: {
+      ModalDeck: () => import('./ModalDeck')
+    },
     mounted () {
       if (!sessionStorage.getItem('awsAccess')) {
         sessionStorage.clear()
@@ -16,10 +19,10 @@ import axios from 'axios'
       try {
        axios.patch(`${process.env.VUE_APP_API_URL}api/deck/owner`, { accessToken: sessionStorage.getItem('awsAccess') })
       .then(res => {
-        console.log(res)
+        this.decks = res.data
       }).catch(() => {
-        this.showInfo = true;
         this.message = 'Try saving your first deck!'
+        this.showInfo = true
         setTimeout(() => {
           this.showInfo = false
         }, 3000)
@@ -27,11 +30,30 @@ import axios from 'axios'
       } catch (error) {
         console.log(error)
       }
-    }
+    },
+    methods: {
+      deleteDeck (deckId) {
+        axios.delete(`${process.env.VUE_APP_API_URL}api/deck/${deckId}`)
+        .then(() => {
+          this.decks = this.decks.filter((deck => deck._id != deckId))
+          this.message = 'Removed!'
+          this.showInfo = true
+          setTimeout(() => {
+            this.showInfo = false
+          }, 2500)
+        })
+      },
+      routeToEdit (deckid) {
+        this.$router.push({ name: 'deck', params: { deckid } })
+      }
+    },
   }
 </script>
 
 <template>
+<div>
+   <modal-deck />
+   <br>
   <v-card
     class="mx-auto"
     max-width="600"
@@ -54,12 +76,37 @@ import axios from 'axios'
         :key="i"
       >
         <v-list-item-icon>
-          <v-icon v-text="deck.icon"></v-icon>
+          <v-icon v-text="deck.titulo"></v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title v-text="deck.name"></v-list-item-title>
+          <v-list-item-title v-text="deck.descricao"></v-list-item-title>
         </v-list-item-content>
+          <v-btn
+            class="mx-2"
+            fab
+            dark
+            small
+            color="info"
+            @click="routeToEdit(deck._id)"
+          >
+          <v-icon>
+            mdi-cards
+          </v-icon>
+        </v-btn>
+          <v-btn
+            class="mx-2"
+            fab
+            dark
+            small
+            color="warning"
+            @click="deleteDeck(deck._id)"
+          >
+          <v-icon>
+            mdi-delete-outline
+          </v-icon>
+        </v-btn>
       </v-list-item>
     </v-list>
   </v-card>
+</div>
 </template>

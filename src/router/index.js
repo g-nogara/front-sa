@@ -5,6 +5,7 @@ import Register from '../components/Register'
 import Validate from '../components/Validate'
 import Login from '../components/Login'
 import Home from '../components/Home'
+import Deck from '../components/Deck'
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ const routes = [
     name: 'home',
     path: '/home',
     component: Home
+  },
+  {
+    name: 'deck',
+    path: '/deck/:deckid',
+    component: Deck
   }
 ]
 

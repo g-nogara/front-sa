@@ -1,9 +1,28 @@
 <script>
 export default {
   name: 'App',
-  computed: {
-    hasAccess () {
-      return !!sessionStorage.getItem('awsAccess')
+  data () {
+    return {
+      hasAccess: false,
+      freeDomains: ['/login', '/register', '/validate']
+    }
+  },
+  methods: {
+    logOut () {
+      sessionStorage.clear()
+      location.reload();
+    }
+  },
+  created () {
+    this.hasAccess = !!sessionStorage.getItem('awsAccess')
+    if (!this.hasAccess && !this.freeDomains.includes(this.$route.path)) {
+      this.$router.push('/login')
+    }
+  },
+  mounted () {
+    this.hasAccess = !!sessionStorage.getItem('awsAccess')
+    if (!this.hasAccess && !this.freeDomains.includes(this.$route.path)) {
+      this.$router.push('/login')
     }
   }
 };
@@ -65,11 +84,18 @@ export default {
               <v-list-item-title>Validate code</v-list-item-title>
             </v-list-item>
 
-            <v-list-item v-if="hasAccess" to="home">
+            <v-list-item v-if="hasAccess" to="/home">
               <v-list-item-icon>
                 <v-icon>mdi-home</v-icon>
               </v-list-item-icon>
               <v-list-item-title>Home</v-list-item-title>
+            </v-list-item>
+
+            <v-list-item v-if="hasAccess" @click="logOut">
+              <v-list-item-icon>
+                <v-icon>mdi-exit-run</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>Log out</v-list-item-title>
             </v-list-item>
 
           </v-list>

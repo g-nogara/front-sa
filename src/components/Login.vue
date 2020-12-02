@@ -5,6 +5,7 @@ import * as AWS from 'aws-sdk/global'
     data: () => ({
       valid: false,
       showErrorAlert: false,
+      loadingLogin: false,
       errorMessage: '',
       showSuccessAlert: false,
       password: '',
@@ -17,6 +18,7 @@ import * as AWS from 'aws-sdk/global'
     methods: {
       login() {
         return new Promise((resolve, reject) => {
+          this.loadingLogin = true
           const errorAlert = (msg) => {
           this.errorMessage = msg
           this.showErrorAlert = true
@@ -26,6 +28,8 @@ import * as AWS from 'aws-sdk/global'
         }
         if (!this.valid) {
           errorAlert('Por favor confira os dados preenchidos e as dicas de que aparecem abaixo do campo!')
+          this.loadingLogin = false
+          reject('Failed to login')
         }
 
         const authenticationData = {
@@ -44,6 +48,8 @@ import * as AWS from 'aws-sdk/global'
 
           onFailure: (err) => {
             errorAlert(err.message)
+            this.loadingLogin = false
+            reject()
           },
 
           onSuccess: (result) => {
@@ -62,15 +68,18 @@ import * as AWS from 'aws-sdk/global'
             AWS.config.credentials.refresh(error => {
               if (error) {
                 errorAlert(error.message)
+                this.loadingLogin = false
                 reject(error)
               }
             })
             sessionStorage.setItem('awsAccess', accessToken)
             sessionStorage.setItem('awsRefresh', refreshToken)
             this.showSuccessAlert = true
+            this.loadingLogin = false
             setTimeout(() => {
               this.showSuccessAlert = false
               this.$router.push('/home')
+              location.reload()
             }, 5000)
             resolve(result)
 
@@ -132,9 +141,25 @@ import * as AWS from 'aws-sdk/global'
           color="primary"
           elevation="7"
           @click="login"
+          :loading="loadingLogin"
         >Login
+        </v-btn>
+        <div class="divisor" />
+        <v-btn
+          color="primary"
+          elevation="7"
+          @click="() => this.$router.push('/register')"
+        >Sign up
         </v-btn>
       </v-row>
     </v-container>
   </v-form>
 </template>
+
+<style scoped>
+.divisor {
+  width: 1rem;
+  height: 4rem;
+  content: '';
+}
+</style>

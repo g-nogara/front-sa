@@ -14,6 +14,7 @@
     "axios": "^0.21.0",
     "bootstrap": "^4.5.3",
     "core-js": "^3.6.5",
+    "mtgsdk": "^0.4.3",
     "portal-vue": "^2.1.7",
     "vue": "^2.6.11",
     "vue-router": "^3.4.9",

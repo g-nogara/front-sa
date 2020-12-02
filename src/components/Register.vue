@@ -32,7 +32,7 @@ import { CognitoUserAttribute, CognitoUserPool } from 'amazon-cognito-identity-j
           }, 5000)
         }
         if (!this.valid) {
-          errorAlert()
+          errorAlert('Sorry, please check the input values and try again')
         }
 
         const userPool = new CognitoUserPool({ UserPoolId: process.env.VUE_APP_POOL_ID, ClientId: process.env.VUE_APP_CLIENT_ID })
